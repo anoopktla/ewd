@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.0.BUILD-SNAPSHOT</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>de.logicline</groupId>
+	<artifactId>ewd-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ewd-api</name>
+	<description>EWD backend micro service deployed in cumulocity</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<c8y.version>9.3.0</c8y.version>
+		<main.class>de.logicline.ewdbackendms.EwdBackendMsApplication</main.class>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.nsn.cumulocity.clients-java</groupId>
+			<artifactId>microservice-autoconfigure</artifactId>
+			<version>${c8y.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nsn.cumulocity.model</groupId>
+			<artifactId>device-capability-model</artifactId>
+			<version>${c8y.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>c8y.ms-connector</groupId>
+			<artifactId>c8y-ms-connector</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>ewd-api</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>${main.class}</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.nsn.cumulocity.clients-java</groupId>
+				<artifactId>microservice-package-maven-plugin</artifactId>
+				<version>${c8y.version}</version>
+				<executions>
+					<execution>
+						<id>package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>package</goal>
+						</goals>
+						<configuration>
+							<name>ewd-api</name>
+							<encoding>UTF-8</encoding>
+							<rpmSkip>true</rpmSkip>
+							<containerSkip>false</containerSkip>
+							<skip>${skipExecution}</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>microservice-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>microservice-package</goal>
+						</goals>
+						<configuration>
+							<name>ewd-api</name>
+							<image>ewd-api</image>
+							<encoding>UTF-8</encoding>
+							<skip>${skipExecution}</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>releases</id>
+			<name>Central Internal</name>
+			<url>http://devsrv.logicline.de/archiva/repository/internal</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<name>Central Internal</name>
+			<url>http://devsrv.logicline.de/archiva/repository/snapshots</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<url>http://download.cumulocity.com/maven/repository</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
